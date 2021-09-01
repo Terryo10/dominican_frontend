@@ -40,22 +40,22 @@ class FooterComponent extends Component {
                       <h4 className="widget-title">Our Projects</h4>
                       <ul>
                         <li>
-                          <a href="project-1.html">Medical & Health</a>
+                          <a >Medical & Health</a>
                         </li>
                         <li>
-                          <a href="project-2.html">Educations</a>
+                          <a >Educations</a>
                         </li>
                         <li>
-                          <a href="project-1.html">Technology</a>
+                          <a >Technology</a>
                         </li>
                         <li>
-                          <a href="project-3.html">Web Development</a>
+                          <a >Web Development</a>
                         </li>
                         <li>
-                          <a href="project-2.html">Food & Clothes</a>
+                          <a >Food & Clothes</a>
                         </li>
                         <li>
-                          <a href="project-1.html">Video & Movies</a>
+                          <a >Video & Movies</a>
                         </li>
                       </ul>
                     </div>
@@ -144,21 +144,13 @@ class FooterComponent extends Component {
                           <i className="fab fa-youtube"></i>
                         </a>
                       </li>
-                      <li>
-                        <a href="#">
-                          <i className="fab fa-behance"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i className="fab fa-google-plus-g"></i>
-                        </a>
-                      </li>
                     </ul>
                   </div>
                   <div className="col-md-6">
                     <p className="copyright-text">
-                      © 2021 <a href="https://designave.co.zw">Powered By DesignAve</a>. All Rights Reserved
+                      © 2021 Dominican Health{" "}
+                      <a href="https://designave.co.zw">Powered By DesignAve</a>
+                      . All Rights Reserved
                     </p>
                   </div>
                 </div>

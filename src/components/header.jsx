@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 class HeaderGlobal extends Component {
   state = {};
   render() {
+    const mystyle = {
+      height: "50px",
+    };
     return (
       <div>
-        <header className="site-header sticky-header transparent-header topbar-transparent">
+        <header className="site-header sticky-header">
           <div className="header-topbar d-none d-sm-block">
             <div className="container">
               <div className="row justify-content-between align-items-center">
@@ -16,7 +19,7 @@ class HeaderGlobal extends Component {
                         <i className="far fa-envelope"></i>{" "}
                         <span
                           className="__cf_email__"
-                          data-cfemail="fe8d8b8e8e918c8abe99939f9792d09d9193"
+                          data-cfemail="c4b7b1b4b4abb6b084a3a9a5ada8eaa7aba9"
                         >
                           info@dominicanhealth.co.zw
                         </span>
@@ -24,8 +27,13 @@ class HeaderGlobal extends Component {
                     </li>
                     <li>
                       <a href="#">
-                        <i className="far fa-map-marker-alt"></i> 250 Main
-                        Street, 2nd Floor, USA
+                        <i className="far fa-map-marker-alt"></i> 42 Dublin
+                        road, Emerald Hill Harare
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="far fa-phone"></i> +263 778 939 998
                       </a>
                     </li>
                   </ul>
@@ -61,14 +69,18 @@ class HeaderGlobal extends Component {
             <div className="container">
               <div className="navbar-inner">
                 <div className="site-logo">
-                  <a href="/">
-                    <img src="assets/img/logo.png" alt="Dominican Health"></img>
+                  <a href="index.html">
+                    <img
+                      src="logop.png"
+                      alt="Dominican Health"
+                      style={mystyle}
+                    ></img>
                   </a>
                 </div>
                 <div className="nav-menu">
                   <ul>
-                    <li className="current">
-                      <Link to="/">Home</Link>
+                    <li>
+                      <Link to="/home">Home</Link>
                     </li>
 
                     <li>
@@ -77,12 +89,12 @@ class HeaderGlobal extends Component {
                   </ul>
                 </div>
                 <div className="navbar-extra d-flex align-items-center">
-                  <a
-                    href="events.html"
+                  <Link
+                    to="/donate"
                     className="main-btn nav-btn d-none d-sm-inline-block"
                   >
                     Donate Now <i className="far fa-arrow-right"></i>
-                  </a>
+                  </Link>
                   <a href="#" className="nav-toggler">
                     <span></span>
                   </a>
@@ -93,11 +105,11 @@ class HeaderGlobal extends Component {
           <div className="mobile-menu-panel">
             <div className="panel-logo">
               <a href="index.html">
-                <img src="assets/img/logo-white.png" alt="Funden"></img>
+                <img src="logop.png" alt="Funden"></img>
               </a>
             </div>
             <ul className="panel-menu">
-              <li className="current">
+              <li>
                 <a href="index.html">Home</a>
                 <ul className="submenu">
                   <li>
@@ -129,7 +141,7 @@ class HeaderGlobal extends Component {
                 <a href="events.html">Events</a>
               </li>
               <li>
-                <a href="news-standard.html">News</a>
+                <a href="news.html">News</a>
                 <ul className="submenu">
                   <li>
                     <a href="news-standard.html">News Standard</a>
@@ -157,14 +169,17 @@ class HeaderGlobal extends Component {
                   <li>
                     <a href="faq.html">FAQ</a>
                   </li>
+                  <li>
+                    <a href="testimonial.html">Testimonials</a>
+                  </li>
                 </ul>
               </li>
-              <li>
-                <a href="contact.html">Contact</a>
+              <li className="current">
+                <a href="#">Contact</a>
               </li>
             </ul>
             <div className="panel-extra">
-              <a href="#" className="main-btn btn-white">
+              <a href="events.html" className="main-btn btn-white">
                 Donate Now <i className="far fa-arrow-right"></i>
               </a>
             </div>
