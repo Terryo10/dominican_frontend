@@ -11,8 +11,6 @@ class DonatePage extends Component {
       paynow: true,
       braintree: false,
     };
-
-    
   }
 
   ecocashSetter = () => {
@@ -49,8 +47,7 @@ class DonatePage extends Component {
                       </div>
                       <div className="col-6">
                         <img
-                          height="80px"
-                          src="template/assets/img/braint.png"
+                          src="template/assets/img/braintree.svg"
                           alt="Line"
                         ></img>
                       </div>

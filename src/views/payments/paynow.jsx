@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Loader from "../../components/loading";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 class PaynowPage extends Component {

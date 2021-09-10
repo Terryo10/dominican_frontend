@@ -45,9 +45,9 @@ class ContactPage extends Component {
                       dolore dantiumy totam apeam eaquey quaventore veritatis
                       architecto beatae.
                     </p>
-                    <a href="events.html" className="main-btn mt-35">
-                      Get Free Quote <i className="far fa-arrow-right"></i>
-                    </a>
+                    <Link to="/donate" className="main-btn mt-35">
+                      Donate Today <i className="far fa-arrow-right"></i>
+                    </Link>
                   </div>
                 </div>
                 <div className="col-xl-6 col-lg-7 offset-xl-1">
@@ -63,7 +63,7 @@ class ContactPage extends Component {
                           </div>
                           <div className="info-content">
                             <h5>Our Location</h5>
-                            <p>5075 Main Road, D- Block, 2nd Floor, New York</p>
+                            <p>42 Dublin road, Emerald Hill Harare Zimbabwe</p>
                           </div>
                         </div>
                         <div
@@ -81,10 +81,10 @@ class ContactPage extends Component {
                                 className="__cf_email__"
                                 data-cfemail="0a797f7a7a65787e63646c654a6d676b636624696567"
                               >
-                                [email&#160;protected]
-                              </a>{" "}
+                                info@dominicanhealth.co.zw
+                              </a>
                               <br />
-                              www.funden.com
+                              www.dominicanhealth.co.zw
                             </p>
                           </div>
                         </div>
@@ -100,8 +100,8 @@ class ContactPage extends Component {
                           <div className="info-content">
                             <h5>Support 24/7</h5>
                             <p>
-                              +012 (345) 689 37 <br />
-                              012345687
+                              +263 778 939 998
+                              <br />
                             </p>
                           </div>
                         </div>
