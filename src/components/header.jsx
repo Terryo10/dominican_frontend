@@ -4,7 +4,7 @@ class HeaderGlobal extends Component {
   state = {};
   render() {
     const mystyle = {
-      height: "50px",
+      height: "80px",
     };
     return (
       <div>
@@ -74,7 +74,7 @@ class HeaderGlobal extends Component {
                     to="/donate"
                     className="main-btn nav-btn d-none d-sm-inline-block"
                   >
-                    Donate Now <i className="far fa-arrow-right"></i>
+                    Donate Today <i className="far fa-arrow-right"></i>
                   </Link>
                   <a className="nav-toggler">
                     <span></span>

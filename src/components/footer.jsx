@@ -25,11 +25,7 @@ class FooterComponent extends Component {
                       <p>Dominican sisters (Mother Patrick and companions)</p>
                     </div>
                   </div>
-                  <div className="col-lg-2 col-md-5 col-sm-6">
-                    <div className="widget nav-widget">
-                      <h4 className="widget-title">Our Projects</h4>
-                    </div>
-                  </div>
+                
 
                   <div className="col-lg-auto col-md-5 col-sm-8">
                     <div className="widget contact-widget">

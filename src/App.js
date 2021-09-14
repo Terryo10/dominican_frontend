@@ -5,6 +5,7 @@ import NotFound from './components/not_found';
 import ContactPage from './views/contact';
 import DonatePage from './views/donate';
 import PaynowSuccess from './views/payments/paynow_success';
+// import '../node_modules/react-modal-video/scss/modal-video.scss';
 
 function App() {
   return (
