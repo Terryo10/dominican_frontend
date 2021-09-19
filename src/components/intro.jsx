@@ -2,19 +2,51 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ModalVideo from "react-modal-video";
 import "react-modal-video/scss/modal-video.scss";
+import axios from "axios";
+import CurrencyFormat from "react-currency-format";
 
 class IntroComponent extends Component {
   constructor() {
     super();
     this.state = {
       isOpen: false,
+      loadingDonationsStatus: true,
+      error: false,
+      errorMessage: "Sorry Could not fetch donations data",
     };
     this.openModal = this.openModal.bind(this);
+    this.getDonationsStatus();
   }
 
   openModal() {
     this.setState({ isOpen: true });
   }
+
+  getDonationsStatus = async () => {
+    axios.get("http://127.0.0.1:8000/api/donations").then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        let rated = res.data.paynow / res.data.rate.rate;
+        let total = rated + res.data.braintree;
+        let rounded = Math.round(total);
+        console.log(total);
+        this.setState({
+          rate: res.data.rate.rate,
+          zwl: res.data.paynow,
+          targetBalance: res.data.rate.target_balance,
+          usd: res.data.braintree,
+          totalBalance: rounded,
+          loadingDonationsStatus: false,
+          error: false,
+        });
+      } else {
+        //error happened
+        this.setState({
+          error: true,
+        });
+      }
+    });
+  };
 
   render() {
     return (
@@ -26,7 +58,7 @@ class IntroComponent extends Component {
                 <ModalVideo
                   channel="youtube"
                   isOpen={this.state.isOpen}
-                  videoId="L61p2uyiMSo"
+                  videoId="skn0c0c8zJM"
                   onClose={() => this.setState({ isOpen: false })}
                 />
                 <div className="hero-text">
@@ -37,6 +69,40 @@ class IntroComponent extends Component {
                     Fundraising for construction of The Harare Dominican Health
                     Facility to offer health services to the City of Harare and
                     surrounding communities.
+                    {this.state.loadingDonationsStatus ? (
+                      "..Loading"
+                    ) : (
+                      <div>
+                        Our Current Donation Target is{" "}
+                        <CurrencyFormat
+                          value={this.state.targetBalance}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"$"}
+                        />{" "}
+                        , the current donated funds in USD are{" "}
+                        <CurrencyFormat
+                          value={this.state.usd}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"$"}
+                        />{" "}
+                        and the current donated funds in ZWL are{" "}
+                        <CurrencyFormat
+                          value={this.state.zwl}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"$"}
+                        />{" "}
+                        which adds up to{" "}
+                        <CurrencyFormat
+                          value={this.state.totalBalance}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"$"}
+                        />
+                      </div>
+                    )}
                   </p>
                   <ul className="hero-btn">
                     <li className="wow fadeInUp" data-wow-delay="0.4s">
@@ -90,13 +156,6 @@ class IntroComponent extends Component {
         <div className="container">
           <div className="col-lg-12">
             <div className="blog-post-details">
-              {/* <div className="post-thumbnail">
-              <img
-                src="template/assets/img/blog/blog-details.jpg"
-                class="img-fluid"
-                alt="Responsive image"
-              ></img>
-            </div> */}
               <div className="post-content">
                 <h3 className="title">About the Project.</h3>
                 <p>

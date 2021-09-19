@@ -18,7 +18,9 @@ class PaynowPage extends Component {
       poll_url: "",
       reCheckingStatus: false,
       cancelledPayment: false,
+      connection: false,
       paymentDone: false,
+      errors: {},
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -34,18 +36,6 @@ class PaynowPage extends Component {
       [name]: value,
     });
   }
-
-  // navigateToSuccessPage = (props) => {
-  //   // this.context.router.transitionTo("/");
-  //   browserHistory.push("/");
-  //   // let history = useHistory();
-  //   // setTimeout(() => {
-  //   //   console.log(props.router);
-  //   //   this.props.router.push({
-  //   //     pathname: `/paynow_success/${this.state.poll_url}`,
-  //   //   });
-  //   // }, 2000);
-  // };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -67,10 +57,6 @@ class PaynowPage extends Component {
   };
 
   makePayment = async () => {
-    console.log("paying now");
-    this.setState({
-      loading: true,
-    });
     let body = {
       name: this.state.name,
       email: this.state.email,
@@ -79,20 +65,36 @@ class PaynowPage extends Component {
       phone_number: this.state.phone_number,
     };
 
-    let baseUrl = "http://127.0.0.1:8000";
-
-    var url = "/api/donate_with_paynow";
-
-    axios.post(`${baseUrl}${url}`, body).then((res) => {
-      if (res.status === 200) {
-        this.setState({
-          loading: false,
-          responseMessage: res.data.message,
-          checkingPayment: true,
-          poll_url: res.data.donation.id,
+    if (body.phone_number.length < 10 || body.phone_number.length > 10) {
+      console.log(body.phone_number);
+      this.state.errors["phone_number"] = "invalid phone number";
+    } else {
+      console.log("paying now");
+      this.setState({
+        loading: true,
+      });
+      let baseUrl = "http://127.0.0.1:8000";
+      var url = "/api/donate_with_paynow";
+      axios
+        .post(`${baseUrl}${url}`, body)
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              loading: false,
+              responseMessage: res.data.message,
+              checkingPayment: true,
+              poll_url: res.data.donation.id,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(`pane error ${error}`);
+          this.setState({
+            connection: true,
+            loading: false,
+          });
         });
-      }
-    });
+    }
   };
 
   checkPayment = async () => {
@@ -125,7 +127,6 @@ class PaynowPage extends Component {
         } else if (res.data.status === "Sent") {
           console.log("payment was sent initializing recheck");
           setTimeout(() => this.checkPayment(), 10000);
-          // this.checkPayment();
         }
       }
     });
@@ -146,6 +147,7 @@ class PaynowPage extends Component {
       reCheckingStatus: false,
       cancelledPayment: false,
       paymentDone: false,
+      connection: false,
     });
   };
 
@@ -189,6 +191,17 @@ class PaynowPage extends Component {
             <center>
               <div>
                 <h4>Payment Was Cancelled</h4>
+                <button className="main-btn" onClick={this.reset}>
+                  Retry Donating <i className="far fa-arrow-right"></i>
+                </button>
+              </div>
+            </center>
+          </div>
+        ) : this.state.connection ? (
+          <div>
+            <center>
+              <div>
+                <h4>Oops Something happened !!</h4>
                 <button className="main-btn" onClick={this.reset}>
                   Retry Donating <i className="far fa-arrow-right"></i>
                 </button>
@@ -271,21 +284,23 @@ class PaynowPage extends Component {
                   </select>
                 </div>
 
-                <div className="input-group col-12 mb-20">
-                  <span className="input-group-text" id="basic-addon1">
-                    +263
-                  </span>
+                <div className="form-group col-12 mb-20">
+                  <lable for="exampleFormControlInput1">Phone Number</lable>
                   <input
                     value={this.state.phone_number}
                     onChange={this.handleInputChange}
                     name="phone_number"
-                    type="tel"
+                    type="number"
                     className="form-control"
-                    placeholder="Enter Your Payment Phone Number"
-                    aria-label="Username"
+                    placeholder="E.g 0772... "
+                    aria-label="phone_number"
                     aria-describedby="basic-addon1"
                     required
+                    minlength="5"
                   ></input>
+                  <span style={{ color: "red" }}>
+                    {this.state.errors["phone_number"]}
+                  </span>
                 </div>
 
                 <div className="col-12">

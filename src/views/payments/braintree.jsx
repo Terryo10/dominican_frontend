@@ -14,6 +14,7 @@ class BraintreePage extends Component {
     email: "",
     amount: "",
     phone_number: "",
+    tokenError: false,
   };
 
   handleInputChange(event) {
@@ -29,12 +30,17 @@ class BraintreePage extends Component {
 
   async componentDidMount() {
     // Get a client token for authorization from your server
-    const response = await axios.get("http://127.0.0.1:8000/api/get_token");
-    const clientToken = await response.data.token; // If returned as JSON string
-
-    this.setState({
-      clientToken,
+    axios.get("http://127.0.0.1:8000/api/get_token").then((res) => {
+      if (res.status === 200) {
+        this.setState({
+          clientToken: res.data.token,
+        });
+      } else {
+        //error handling
+      }
     });
+    // If returned as JSON string
+    //please check for errors here
   }
 
   async payDonation(event) {
@@ -68,77 +74,99 @@ class BraintreePage extends Component {
     } else {
       return (
         <div>
-          <div className="comment-form">
-            <h4 className="template-title">Enter Your Payment Details </h4>
-            <br />
-            <form onSubmit={this.payDonation.bind(this)}>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="input-field mb-20">
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Full Name"
-                      value={this.state.name}
-                      onChange={this.handleInputChange}
-                      required
-                    ></input>
-                  </div>
+          {this.state.connection ? (
+            <div>
+              <center>
+                <div>
+                  <h4>Oops Something happened !!</h4>
+                  <button className="main-btn">
+                    Retry Donating <i className="far fa-arrow-right"></i>
+                  </button>
                 </div>
-                <div className="col-md-6">
-                  <div className="input-field mb-20">
-                    <input
-                      value={this.state.email}
-                      name="email"
-                      onChange={this.handleInputChange}
-                      type="email"
-                      placeholder="Email Address"
-                      required
-                    ></input>
-                  </div>
-                </div>
+              </center>
+            </div>
+          ) : (
+            <div>
+              <div className="comment-form">
+                <h4 className="template-title">Enter Your Payment Details </h4>
+                <br />
+                <form onSubmit={this.payDonation.bind(this)}>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="input-field mb-20">
+                        <input
+                          type="text"
+                          name="name"
+                          placeholder="Full Name"
+                          value={this.state.name}
+                          onChange={this.handleInputChange}
+                          required
+                        ></input>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="input-field mb-20">
+                        <input
+                          value={this.state.email}
+                          name="email"
+                          onChange={this.handleInputChange}
+                          type="email"
+                          placeholder="Email Address"
+                          required
+                        ></input>
+                      </div>
+                    </div>
 
-                <div className="col-12">
-                  <div className="input-group mb-3">
-                    <span className="input-group-text" id="basic-addon1">
-                      (USD) $
-                    </span>
-                    <input
-                      name="amount"
-                      value={this.state.amount}
-                      onChange={this.handleInputChange}
-                      type="number"
-                      className="form-control"
-                      placeholder="Enter your donation amount"
-                      aria-label="Amount"
-                      min="1"
-                      aria-describedby="basic-addon1"
-                      required
-                    ></input>
+                    <div className="col-12">
+                      <div className="input-group mb-3">
+                        <span className="input-group-text" id="basic-addon1">
+                          (USD) $
+                        </span>
+                        <input
+                          name="amount"
+                          value={this.state.amount}
+                          onChange={this.handleInputChange}
+                          type="number"
+                          className="form-control"
+                          placeholder="Enter your donation amount"
+                          aria-label="Amount"
+                          min="1"
+                          aria-describedby="basic-addon1"
+                          required
+                        ></input>
+                      </div>
+                    </div>
+                    <div className=" col-md-12">
+                      <input
+                        value={this.state.phone_number}
+                        onChange={this.handleInputChange}
+                        name="phone_number"
+                        type="tel"
+                        className="form-control"
+                        placeholder="Phone Number"
+                        required
+                      ></input>
+                    </div>
                   </div>
-                </div>
-                <div className=" col-md-12">
-                  <input
-                    value={this.state.phone_number}
-                    onChange={this.handleInputChange}
-                    name="phone_number"
-                    type="tel"
-                    className="form-control"
-                    placeholder="Phone Number"
-                    required
-                  ></input>
-                </div>
+
+                  <DropIn
+                    options={{
+                      authorization: this.state.clientToken,
+                      paypal: {
+                        singleUse: true,
+                        amount: this.state.amount,
+                        currency: "USD",
+                      },
+                    }}
+                    onInstance={(instance) => (this.instance = instance)}
+                  />
+                  <button className="main-btn" type="submit">
+                    Donate <i className="far fa-arrow-right"></i>
+                  </button>
+                </form>
               </div>
-
-              <DropIn
-                options={{ authorization: this.state.clientToken }}
-                onInstance={(instance) => (this.instance = instance)}
-              />
-              <button className="main-btn" type="submit">
-                Donate <i className="far fa-arrow-right"></i>
-              </button>
-            </form>
-          </div>
+            </div>
+          )}
         </div>
       );
     }
