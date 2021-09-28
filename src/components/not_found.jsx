@@ -10,7 +10,11 @@ class NotFound extends Component {
         <section className="testimonials-section section-gap">
           <div className="container">
             <div className="common-heading text-center mb-30">
-              <img src="assets/img/logo.png" alt="Page Not Found"></img>
+              <img
+                src="template/assets/img/error.png"
+                alt="Page Not Found"
+              ></img>
+              <h3>Page Not Found</h3>
             </div>
           </div>
         </section>
