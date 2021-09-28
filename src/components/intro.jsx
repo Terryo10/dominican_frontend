@@ -4,6 +4,7 @@ import ModalVideo from "react-modal-video";
 import "react-modal-video/scss/modal-video.scss";
 import axios from "axios";
 import CurrencyFormat from "react-currency-format";
+import { ProgressBar } from "react-bootstrap";
 
 class IntroComponent extends Component {
   constructor() {
@@ -13,6 +14,7 @@ class IntroComponent extends Component {
       loadingDonationsStatus: true,
       error: false,
       errorMessage: "Sorry Could not fetch donations data",
+      currentProgress: 0,
     };
     this.openModal = this.openModal.bind(this);
     this.getDonationsStatus();
@@ -22,15 +24,26 @@ class IntroComponent extends Component {
     this.setState({ isOpen: true });
   }
 
+  percentage(partialValue, totalValue) {
+    let value = (100 * partialValue) / totalValue;
+    return Math.round(value);
+  }
+
   getDonationsStatus = async () => {
-    axios.get("http://127.0.0.1:8000/api/donations").then((res) => {
+    axios.get("https://app.dominicanhealth.co.zw/api/donations").then((res) => {
       console.log(res);
       if (res.status === 200) {
         let rated = res.data.paynow / res.data.rate.rate;
-        let total = rated + res.data.braintree;
+        let manual = res.data.manual_payments;
+        let total = rated + res.data.braintree + manual;
         let rounded = Math.round(total);
+        let percentageDonated = this.percentage(
+          rounded,
+          res.data.rate.target_balance
+        );
         console.log(total);
         this.setState({
+          manuallyDonated: manual,
           rate: res.data.rate.rate,
           zwl: res.data.paynow,
           targetBalance: res.data.rate.target_balance,
@@ -38,6 +51,7 @@ class IntroComponent extends Component {
           totalBalance: rounded,
           loadingDonationsStatus: false,
           error: false,
+          currentProgress: percentageDonated,
         });
       } else {
         //error happened
@@ -152,7 +166,29 @@ class IntroComponent extends Component {
             <div className="dot-two"></div>
           </div>
         </section>
-
+        <div className="container">
+          <div>
+            <div
+              className="single-event-item mb-30 wow fadeInUp"
+              data-wow-delay="0.1s"
+            >
+              <center>
+                <br></br>
+                <div className="text-align-center">
+                  <h4 className="event-title">
+                    <a href="#">Current Progress</a>
+                  </h4>
+                  <ProgressBar
+                    striped
+                    variant="danger"
+                    now={this.state.currentProgress}
+                    label={`${this.state.currentProgress}%`}
+                  />
+                </div>
+              </center>
+            </div>
+          </div>
+        </div>
         <div className="container">
           <div className="col-lg-12">
             <div className="blog-post-details">

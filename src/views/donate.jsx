@@ -3,6 +3,8 @@ import HeaderGlobal from "../components/header";
 import FooterComponent from "../components/footer";
 import PaynowPage from "./payments/paynow";
 import BraintreePage from "./payments/braintree";
+import BankPage from "./payments/bank_page";
+import PaynowDonateButton from "./payments/donation_button";
 // import PageTitle from '../components/page_title';
 class DonatePage extends Component {
   constructor(props) {
@@ -10,6 +12,8 @@ class DonatePage extends Component {
     this.state = {
       paynow: true,
       braintree: false,
+      bankTransfares: false,
+      redirectPayment: false,
     };
   }
 
@@ -17,13 +21,39 @@ class DonatePage extends Component {
     console.log("ecocash");
     this.setState({
       braintree: false,
+      paynow: true,
+      bankTransfares: false,
+      redirectPayment: false,
     });
   };
 
   braintreeSetter = () => {
-    console.log("Click happened");
+    console.log("braintree");
     this.setState({
       braintree: true,
+      paynow: false,
+      bankTransfares: false,
+      redirectPayment: false,
+    });
+  };
+
+  bankSetter = () => {
+    console.log("bank transfare");
+    this.setState({
+      braintree: false,
+      paynow: false,
+      bankTransfares: true,
+      redirectPayment: false,
+    });
+  };
+
+  buttonSetter = () => {
+    console.log("redirect payment");
+    this.setState({
+      braintree: false,
+      paynow: false,
+      bankTransfares: false,
+      redirectPayment: true,
     });
   };
 
@@ -36,44 +66,86 @@ class DonatePage extends Component {
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
-                <div className="blog-post-details">
-                  <div className="post-content">
-                    <div className="row">
-                      <div className="col-6">
-                        <img
-                          src="template/assets/img/paynowmethods.svg"
-                          alt="Line"
-                        ></img>
-                      </div>
-                      <div className="col-6">
-                        <img
-                          src="template/assets/img/braintree.svg"
-                          alt="Line"
-                        ></img>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-6">
-                        <button
-                          onClick={this.ecocashSetter}
-                          className="main-btn"
-                        >
-                          Pay with paynow <i className="far fa-arrow-right"></i>
-                        </button>
-                      </div>
-                      <div className="col-6">
-                        <button
-                          onClick={this.braintreeSetter}
-                          className="main-btn"
-                        >
-                          Pay via BrainTree
-                          <i className="far fa-arrow-right"></i>
-                        </button>
-                      </div>
-                    </div>
+                <div className="card text-center">
+                  <div className="card-header">
+                    <ul className="nav nav-tabs card-header-tabs">
+                      <li className="nav-item">
+                        {this.state.paynow ? (
+                          <a
+                            className="nav-link active"
+                            onClick={this.ecocashSetter}
+                          >
+                            {" "}
+                            Ecocash/Onemoney/Telecash
+                          </a>
+                        ) : (
+                          <a className="nav-link" onClick={this.ecocashSetter}>
+                            {" "}
+                            Ecocash/Onemoney/Telecash
+                          </a>
+                        )}
+                      </li>
+                      <li className="nav-item">
+                        {this.state.braintree ? (
+                          <a
+                            className="nav-link active"
+                            onClick={this.braintreeSetter}
+                          >
+                            {" "}
+                            Visa/MasterCard/DebitCard
+                          </a>
+                        ) : (
+                          <a
+                            className="nav-link"
+                            onClick={this.braintreeSetter}
+                          >
+                            {" "}
+                            Visa/MasterCard/DebitCard
+                          </a>
+                        )}
+                      </li>
+                      <li className="nav-item">
+                        {this.state.bankTransfares ? (
+                          <a
+                            className="nav-link active"
+                            onClick={this.bankSetter}
+                          >
+                            {" "}
+                            Bank Wire Transfare
+                          </a>
+                        ) : (
+                          <a className="nav-link" onClick={this.bankSetter}>
+                            {" "}
+                            Bank Wire Transfare
+                          </a>
+                        )}
+                      </li>
+                      <li className="nav-item">
+                        {this.state.redirectPayment ? (
+                          <a
+                            className="nav-link active"
+                            onClick={this.buttonSetter}
+                          >
+                            {" "}
+                            VPayments/Visa/MasterCard/Nostro
+                          </a>
+                        ) : (
+                          <a className="nav-link" onClick={this.buttonSetter}>
+                            {" "}
+                            VPayments/Visa/MasterCard/Nostro
+                          </a>
+                        )}
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="card-body">
                     <div className="post-footer mt-40">
                       {this.state.braintree ? (
                         <BraintreePage />
+                      ) : this.state.bankTransfares ? (
+                        <BankPage />
+                      ) : this.state.redirectPayment ? (
+                        <PaynowDonateButton></PaynowDonateButton>
                       ) : (
                         <PaynowPage />
                       )}

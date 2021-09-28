@@ -40,11 +40,7 @@ class ContactPage extends Component {
                       </span>
                       <h2 className="title">Ready to Get More Information</h2>
                     </div>
-                    <p>
-                      Sedut perspiciatis unde omnis natus voluptatem accusantium
-                      dolore dantiumy totam apeam eaquey quaventore veritatis
-                      architecto beatae.
-                    </p>
+                    <p>Help us build by buying a brick.</p>
                     <Link to="/donate" className="main-btn mt-35">
                       Donate Today <i className="far fa-arrow-right"></i>
                     </Link>
@@ -77,9 +73,7 @@ class ContactPage extends Component {
                             <h5>Email Address</h5>
                             <p>
                               <a
-                                href="https://webtend.net/cdn-cgi/l/email-protection"
-                                className="__cf_email__"
-                                data-cfemail="0a797f7a7a65787e63646c654a6d676b636624696567"
+                                
                               >
                                 info@dominicanhealth.co.zw
                               </a>

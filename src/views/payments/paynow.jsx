@@ -21,6 +21,7 @@ class PaynowPage extends Component {
       connection: false,
       paymentDone: false,
       errors: {},
+      disabled: false,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -73,7 +74,7 @@ class PaynowPage extends Component {
       this.setState({
         loading: true,
       });
-      let baseUrl = "http://127.0.0.1:8000";
+      let baseUrl = "https://app.dominicanhealth.co.zw";
       var url = "/api/donate_with_paynow";
       axios
         .post(`${baseUrl}${url}`, body)
@@ -106,7 +107,7 @@ class PaynowPage extends Component {
     let body = {
       id: this.state.poll_url,
     };
-    let baseUrl = "http://127.0.0.1:8000";
+    let baseUrl = "https://app.dominicanhealth.co.zw";
     var url = "/api/check_payment";
     axios.post(`${baseUrl}${url}`, body).then((res) => {
       if (res.status === 200) {
@@ -152,9 +153,24 @@ class PaynowPage extends Component {
   };
 
   render() {
+    const style = {
+      height: 100,
+      width: 600,
+    };
     return (
       <div>
-        {this.state.loading ? (
+        {this.state.disabled ? (
+          <div>
+            <center>
+              <div className="spinner-grow text-success" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+              <div>
+                <h4>Sorry This Payment Method Is Currently Disabled</h4>
+              </div>
+            </center>
+          </div>
+        ) : this.state.loading ? (
           <Loader></Loader>
         ) : this.state.checkingPayment ? (
           <div>
@@ -168,9 +184,16 @@ class PaynowPage extends Component {
                   check payment below
                 </h4>
               </div>
+              <br></br>
               <div>
                 <button className="main-btn" onClick={this.checkPayment}>
                   Check Payment <i className="far fa-arrow-right"></i>
+                </button>
+              </div>
+              <br></br>
+              <div>
+                <button className="main-btn" onClick={this.reset}>
+                  Cancel Proceess <i className="far fa-arrow-right"></i>
                 </button>
               </div>
             </center>
@@ -222,6 +245,13 @@ class PaynowPage extends Component {
           </div>
         ) : (
           <div className="comment-form">
+            <div className="text-align-center">
+              <img
+                style={style}
+                src="template/assets/img/paynowmethods.svg"
+                alt="Line"
+              ></img>
+            </div>
             <h4 className="template-title">Enter Your Payment Details </h4>
             <br />
             <form onSubmit={this.handleSubmit}>

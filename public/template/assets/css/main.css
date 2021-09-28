@@ -1135,7 +1135,7 @@ a:hover {
 }
 
 .site-footer .footer-content-area {
-  background-color: var(--primary-color);
+  background-color: #1a1a1a;
   padding-bottom: 30px;
 }
 
@@ -1192,7 +1192,7 @@ a:hover {
 }
 
 .site-footer .footer-cta .container::before {
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
 }
 
 .site-footer .footer-cta .container::after {
@@ -1235,12 +1235,12 @@ a:hover {
 .footer-widgets .widget .widget-title {
   font-size: 22px;
   letter-spacing: 0;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   color: var(--white);
 }
 
 .footer-widgets .widget.about-widget .footer-logo {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .footer-widgets .widget.about-widget p {
@@ -1361,8 +1361,8 @@ a:hover {
 }
 
 .footer-widgets .widget.contact-widget li .info {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 300;
 }
 
 .footer-widgets .widget.contact-widget li .info-title {
@@ -1370,6 +1370,7 @@ a:hover {
   color: #999ca5;
   display: block;
   margin-bottom: 2px;
+  text-align: left;
 }
 
 .footer-widgets .widget.contact-widget li .info,
@@ -1519,8 +1520,6 @@ a:hover {
   background-size: cover;
   background-position: center;
 }
-
-
 
 .hero-area-two .hero-text .title {
   font-size: 45px;

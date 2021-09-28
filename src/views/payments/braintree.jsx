@@ -15,6 +15,14 @@ class BraintreePage extends Component {
     amount: "",
     phone_number: "",
     tokenError: false,
+    error: false,
+    loading: false,
+    processingTransaction: false,
+    transactionSuccessfull: false,
+    paymentError: false,
+    errorMessage: "",
+    message: "",
+    disabled: true,
   };
 
   handleInputChange(event) {
@@ -30,17 +38,42 @@ class BraintreePage extends Component {
 
   async componentDidMount() {
     // Get a client token for authorization from your server
-    axios.get("http://127.0.0.1:8000/api/get_token").then((res) => {
-      if (res.status === 200) {
-        this.setState({
-          clientToken: res.data.token,
-        });
-      } else {
-        //error handling
-      }
+    this.getToken();
+  }
+
+  async getToken() {
+    this.setState({
+      loading: true,
+      error: false,
+      paymentError: false,
+      tokenError: false,
+      processingTransaction: false,
+      transactionSuccessfull: false,
+      paymentError: false,
     });
-    // If returned as JSON string
-    //please check for errors here
+    axios
+      .get("https://app.dominicanhealth.co.zw/api/get_token")
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({
+            clientToken: res.data.token,
+            loading: false,
+          });
+        } else {
+          //error handling
+          this.setState({
+            error: true,
+            loading: false,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("err happened");
+        this.setState({
+          error: true,
+          loading: false,
+        });
+      });
   }
 
   async payDonation(event) {
@@ -54,122 +87,216 @@ class BraintreePage extends Component {
       amount: this.state.amount,
       phone_number: this.state.phone_number,
     };
-    axios.post("http://127.0.0.1:8000/api/make_payment", body).then((res) => {
-      console.log(res);
+    this.setState({
+      processingTransaction: true,
     });
+    axios
+      .post("https://app.dominicanhealth.co.zw/api/make_payment", body)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          console.log("transaction success");
+          this.setState({
+            error: false,
+            processingTransaction: false,
+            transactionSuccessfull: true,
+            message: res.data.message,
+          });
+        } else {
+          // error from server
+          this.setState({
+            error: false,
+            processingTransaction: false,
+            transactionSuccessfull: false,
+            paymentError: true,
+            errorMessage: res.data.message,
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          error: true,
+          processingTransaction: false,
+        });
+      });
   }
 
-  render() {
-    if (!this.state.clientToken) {
-      return (
-        <center>
-          <div className="spinner-grow text-success" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-          <div>
-            <h4>Please Wait ... Loading Secure Payment</h4>
-          </div>
-        </center>
-      );
-    } else {
-      return (
-        <div>
-          {this.state.connection ? (
-            <div>
-              <center>
-                <div>
-                  <h4>Oops Something happened !!</h4>
-                  <button className="main-btn">
-                    Retry Donating <i className="far fa-arrow-right"></i>
-                  </button>
-                </div>
-              </center>
-            </div>
-          ) : (
-            <div>
-              <div className="comment-form">
-                <h4 className="template-title">Enter Your Payment Details </h4>
-                <br />
-                <form onSubmit={this.payDonation.bind(this)}>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="input-field mb-20">
-                        <input
-                          type="text"
-                          name="name"
-                          placeholder="Full Name"
-                          value={this.state.name}
-                          onChange={this.handleInputChange}
-                          required
-                        ></input>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="input-field mb-20">
-                        <input
-                          value={this.state.email}
-                          name="email"
-                          onChange={this.handleInputChange}
-                          type="email"
-                          placeholder="Email Address"
-                          required
-                        ></input>
-                      </div>
-                    </div>
+  reset = () => {
+    this.getToken();
+  };
 
-                    <div className="col-12">
-                      <div className="input-group mb-3">
-                        <span className="input-group-text" id="basic-addon1">
-                          (USD) $
-                        </span>
-                        <input
-                          name="amount"
-                          value={this.state.amount}
-                          onChange={this.handleInputChange}
-                          type="number"
-                          className="form-control"
-                          placeholder="Enter your donation amount"
-                          aria-label="Amount"
-                          min="1"
-                          aria-describedby="basic-addon1"
-                          required
-                        ></input>
-                      </div>
-                    </div>
-                    <div className=" col-md-12">
+  render() {
+    const style = {
+      height: 100,
+      width: 600,
+    };
+    return (
+      <div>
+        {this.state.disabled ? (
+          <div>
+            <center>
+              <div className="spinner-grow text-success" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+              <div>
+                <h4>Sorry This Payment Method Is Currently Disabled</h4>
+              </div>
+            </center>
+          </div>
+        ) : this.state.loading ? (
+          <div>
+            <center>
+              <div className="spinner-grow text-success" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+              <div>
+                <h4>Please Wait ... Loading Secure Payment</h4>
+              </div>
+            </center>
+          </div>
+        ) : this.state.paymentError ? (
+          <div>
+            <center>
+              <div>
+                <h4>PaymentError ...</h4>
+                <br></br>
+                <h6>{this.state.errorMessage}</h6>
+                <button className="main-btn" onClick={this.reset}>
+                  Click Here to try again <i className="far fa-arrow-right"></i>
+                </button>
+              </div>
+            </center>
+          </div>
+        ) : this.state.processingTransaction ? (
+          <div>
+            <center>
+              <div className="spinner-grow text-success" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+              <div>
+                <h4>Please Wait ... processing your transaction</h4>
+              </div>
+            </center>
+          </div>
+        ) : this.state.transactionSuccessfull ? (
+          <div>
+            <center>
+              <div>
+                <h4>Thank you for donating ...</h4>
+                <br></br>
+                <h6>{this.state.message}</h6>
+                <button className="main-btn" onClick={this.reset}>
+                  Click Here if you want to donate more{" "}
+                  <i className="far fa-arrow-right"></i>
+                </button>
+              </div>
+            </center>
+          </div>
+        ) : this.state.error ? (
+          <div>
+            <center>
+              <div>
+                <h4>Oops Something happened !!</h4>
+                <button className="main-btn" onClick={this.reset}>
+                  Retry Donating <i className="far fa-arrow-right"></i>
+                </button>
+              </div>
+            </center>
+          </div>
+        ) : (
+          <div>
+            <div className="comment-form">
+              <div className="text-align-center">
+                <img
+                  style={style}
+                  src="template/assets/img/braintree.svg"
+                  alt="Line"
+                ></img>
+              </div>
+              <h4 className="template-title">Enter Your Payment Details </h4>
+              <br />
+              <form onSubmit={this.payDonation.bind(this)}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="input-field mb-20">
                       <input
-                        value={this.state.phone_number}
+                        type="text"
+                        name="name"
+                        placeholder="Full Name"
+                        value={this.state.name}
                         onChange={this.handleInputChange}
-                        name="phone_number"
-                        type="tel"
-                        className="form-control"
-                        placeholder="Phone Number"
+                        required
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="input-field mb-20">
+                      <input
+                        value={this.state.email}
+                        name="email"
+                        onChange={this.handleInputChange}
+                        type="email"
+                        placeholder="Email Address"
                         required
                       ></input>
                     </div>
                   </div>
 
-                  <DropIn
-                    options={{
-                      authorization: this.state.clientToken,
-                      paypal: {
-                        singleUse: true,
-                        amount: this.state.amount,
-                        currency: "USD",
-                      },
-                    }}
-                    onInstance={(instance) => (this.instance = instance)}
-                  />
-                  <button className="main-btn" type="submit">
-                    Donate <i className="far fa-arrow-right"></i>
-                  </button>
-                </form>
-              </div>
+                  <div className="col-12">
+                    <div className="input-group mb-3">
+                      <span className="input-group-text" id="basic-addon1">
+                        (USD) $
+                      </span>
+                      <input
+                        name="amount"
+                        value={this.state.amount}
+                        onChange={this.handleInputChange}
+                        type="number"
+                        className="form-control"
+                        placeholder="Enter your donation amount"
+                        aria-label="Amount"
+                        min="1"
+                        aria-describedby="basic-addon1"
+                        required
+                      ></input>
+                    </div>
+                  </div>
+                  <div className=" col-md-12">
+                    <input
+                      value={this.state.phone_number}
+                      onChange={this.handleInputChange}
+                      name="phone_number"
+                      type="tel"
+                      className="form-control"
+                      placeholder="Phone Number"
+                      required
+                    ></input>
+                  </div>
+                </div>
+
+                <DropIn
+                  options={{
+                    authorization: this.state.clientToken,
+                    // paypal: {
+                    //   singleUse: true,
+                    //   amount: this.state.amount,
+                    //   currency: "USD",
+                    // },
+                    // googlePay: {
+                    //   singleUse: true,
+                    // },
+                  }}
+                  onInstance={(instance) => (this.instance = instance)}
+                />
+                <button className="main-btn" type="submit">
+                  Donate <i className="far fa-arrow-right"></i>
+                </button>
+              </form>
             </div>
-          )}
-        </div>
-      );
-    }
+          </div>
+        )}
+      </div>
+    );
   }
 }
 

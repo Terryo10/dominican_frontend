@@ -6,6 +6,10 @@ class FooterComponent extends Component {
     const mystyle = {
       height: "50px",
     };
+    const style = {
+      height: "auto",
+      width: "auto",
+    };
     return (
       <div>
         <footer className="site-footer">
@@ -17,15 +21,35 @@ class FooterComponent extends Component {
                     <div className="widget about-widget">
                       <div className="footer-logo">
                         <img
-                          src="logop.png"
+                          src="logop2.png"
                           alt="Dominican Health"
                           style={mystyle}
                         ></img>
                       </div>
-                      <p>Dominican sisters (Mother Patrick and companions)</p>
+                      <p>Dominican Missionary Sisters Zimbabwe</p>
                     </div>
                   </div>
-                
+                  <div class="col-lg-2 col-md-6 col-sm-6">
+                    <div class="widget nav-widget">
+                      <h4 class="widget-title">We Accept</h4>
+                      <ul>
+                        <li>
+                          <img
+                            style={style}
+                            src="template/assets/img/braintree.svg"
+                            alt="Line"
+                          ></img>
+                        </li>
+                        <li>
+                          <img
+                            style={style}
+                            src="template/assets/img/paynowmethods.svg"
+                            alt="Line"
+                          ></img>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
 
                   <div className="col-lg-auto col-md-5 col-sm-8">
                     <div className="widget contact-widget">
@@ -36,7 +60,7 @@ class FooterComponent extends Component {
                             <i className="far fa-phone"></i>
                           </span>
                           <span className="info">
-                            <span className="info-title">Phone Number</span>
+                            {/*<span className="info-title">Phone Number</span>*/}
                             <a>+263 778 939 998</a>
                           </span>
                         </li>
@@ -45,7 +69,7 @@ class FooterComponent extends Component {
                             <i className="far fa-envelope-open"></i>
                           </span>
                           <span className="info">
-                            <span className="info-title">Email Address</span>
+                            {/*<span className="info-title">Email Address</span>*/}
                             <a>
                               <span className="__cf_email__">
                                 info@dominicanhealth.co.zw
@@ -58,7 +82,7 @@ class FooterComponent extends Component {
                             <i className="far fa-map-marker-alt"></i>
                           </span>
                           <span className="info">
-                            <span className="info-title">Locations</span>
+                            {/*<span className="info-title">Locations</span>*/}
                             <a>42 Dublin road, Emerald Hill Harare</a>
                           </span>
                         </li>
