@@ -5,6 +5,7 @@ import PaynowPage from "./payments/paynow";
 import BraintreePage from "./payments/braintree";
 import BankPage from "./payments/bank_page";
 import PaynowDonateButton from "./payments/donation_button";
+import GoFundMe from "./payments/gofundme";
 // import PageTitle from '../components/page_title';
 class DonatePage extends Component {
   constructor(props) {
@@ -86,25 +87,6 @@ class DonatePage extends Component {
                         )}
                       </li>
                       <li className="nav-item">
-                        {this.state.braintree ? (
-                          <a
-                            className="nav-link active"
-                            onClick={this.braintreeSetter}
-                          >
-                            {" "}
-                            Visa/MasterCard/DebitCard
-                          </a>
-                        ) : (
-                          <a
-                            className="nav-link"
-                            onClick={this.braintreeSetter}
-                          >
-                            {" "}
-                            Visa/MasterCard/DebitCard
-                          </a>
-                        )}
-                      </li>
-                      <li className="nav-item">
                         {this.state.bankTransfares ? (
                           <a
                             className="nav-link active"
@@ -136,12 +118,28 @@ class DonatePage extends Component {
                           </a>
                         )}
                       </li>
+                      <li className="nav-item">
+                        {this.state.braintree ? (
+                          <a
+                            className="nav-link active"
+                            onClick={this.braintreeSetter}
+                          >
+                            {" "}
+                            GoFundMe
+                          </a>
+                        ) : (
+                          <a className="nav-link" onClick={this.braintreeSetter}>
+                            {" "}
+                            GoFundMe
+                          </a>
+                        )}
+                      </li>
                     </ul>
                   </div>
                   <div className="card-body">
                     <div className="post-footer mt-40">
                       {this.state.braintree ? (
-                        <BraintreePage />
+                        <GoFundMe />
                       ) : this.state.bankTransfares ? (
                         <BankPage />
                       ) : this.state.redirectPayment ? (

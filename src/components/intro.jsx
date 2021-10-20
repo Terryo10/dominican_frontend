@@ -96,7 +96,7 @@ class IntroComponent extends Component {
                         />{" "}
                         , the current donated funds in USD are{" "}
                         <CurrencyFormat
-                          value={this.state.usd}
+                          value={this.state.manuallyDonated}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"$"}
